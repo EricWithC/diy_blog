@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render ,get_object_or_404
 from django.views import generic
 
 from blog.models import Post, Blogger
@@ -24,5 +24,18 @@ class BloggerListView(generic.ListView):
     model = Blogger
     paginate_by = 5
 
-class BloggerDetailView(generic.DetailView):
-    model = Blogger
+class BloggerDetailView(generic.ListView):
+    model = Post
+    template_name = 'blog/blogger_detail.html'
+    paginate_by = 5
+    
+    def get_queryset(self):
+        id = self.kwargs['pk']
+        target_blogger = get_object_or_404(Blogger, pk = id)
+        return Post.objects.filter(blogger=target_blogger)
+
+    def get_context_data(self, **kwargs):
+        context = super(BloggerDetailView, self).get_context_data(**kwargs)
+        context['blogger'] = get_object_or_404(Blogger, pk = self.kwargs['pk'])
+        return context
+    

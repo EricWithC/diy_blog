@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 class Post(models.Model):
     """Model representing a blog post"""
@@ -34,3 +35,14 @@ class Blogger(models.Model):
     def get_absolute_url(self):
         """Return url to acces detail view of this post"""
         return reverse("blogger-detail", args=[str(self.id)])
+
+class Comment(models.Model):
+    """Model representing a comment made by a logged in user"""
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    body = models.TextField(max_length=500)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_published = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """String for representing the Model object"""
+        return self.username

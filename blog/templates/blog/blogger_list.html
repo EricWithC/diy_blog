@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} | All Bloggers{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <h2 class="title is-2">All Bloggers</h2>
+        <ul class="section">
+            {% for blogger in blogger_list %}
+                <li>
+                    <h5 class="is-5"><a href="{{ blogger.get_absolute_url }}">{{ blogger.username }}</a></h5>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

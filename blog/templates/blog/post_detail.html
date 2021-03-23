@@ -10,4 +10,13 @@
         <br>
         <p> {{ post.body|linebreaks }}</p>
     </div>
+    
+    <div class="section">
+        <h4 class="title is-4">Comments:</h4>
+        <hr>
+        {% for comment in post.comment_set.all %}
+            <p>{{ comment.author }} ({{ comment.date_published }}) - {{ comment.body }}</p>
+            <hr>
+        {% endfor %}
+    </div>
 {% endblock %}
