@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIY Blog{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container is-fluid columns">
+        <nav class="column is-2 menu section">
+            {% block sidebar %}
+                <p class="menu-label">
+                    General
+                </p>
+                <ul class="menu-list">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'all-posts' %}">All Posts</a></li>
+                    <li><a href="{% url 'all-bloggers' %}">All Bloggers</a></li>
+                </ul>
+            {% endblock %}
+        </nav>
+        <div class="column is-10">
+            {% block content %}This is not the content you're looking for.{% endblock  %}
+        </div>
+    </div>
+</body>
+</html>
