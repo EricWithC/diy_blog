@@ -2,11 +2,24 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+class Blogger(models.Model):
+    """Model representing an blogger"""
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
+    bio = models.TextField(max_length=500)
+
+    def __str__(self):
+        """String for representing the Model object"""
+        return self.user.username
+    
+    def get_absolute_url(self):
+        """Return url to acces detail view of this post"""
+        return reverse("blogger-detail", args=[str(self.id)])
+
 class Post(models.Model):
     """Model representing a blog post"""
     title = models.CharField(max_length=200)
     post_date = models.DateField(auto_now_add=True)
-    blogger = models.ForeignKey('Blogger', on_delete=models.CASCADE)
+    blogger = models.ForeignKey(Blogger, on_delete=models.CASCADE)
     body = models.TextField()
 
     class Meta:
@@ -21,21 +34,6 @@ class Post(models.Model):
         """Return url to acces detail view of this post"""
         return reverse("post-detail", args=[str(self.id)])
 
-class Blogger(models.Model):
-    """Model representing an blogger"""
-    first_name = models.CharField(max_length=200, null=True, blank=True)    
-    last_name = models.CharField(max_length=200, null=True, blank=True)
-    username = models.CharField(max_length=50, unique=True, help_text="Username can contain 50 characters max.")
-    bio = models.TextField(max_length=500)
-
-    def __str__(self):
-        """String for representing the Model object"""
-        return self.username
-    
-    def get_absolute_url(self):
-        """Return url to acces detail view of this post"""
-        return reverse("blogger-detail", args=[str(self.id)])
-
 class Comment(models.Model):
     """Model representing a comment made by a logged in user"""
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -45,4 +43,9 @@ class Comment(models.Model):
 
     def __str__(self):
         """String for representing the Model object"""
-        return self.username
+        len_title=75
+        if len(self.body)>len_title:
+            titlestring=self.body[:len_title] + '...'
+        else:
+            titlestring=self.body
+        return titlestring

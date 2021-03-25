@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} | Comment{% endblock %}
+
+{% block content %}
+<div class="section">
+    <h3 class="title is-3">Comment for: <a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="field">
+            <label for="{{ form.body.id_for_label }}" class="label">{{ form.body.label }}</label>
+            <div class="control">
+                {{ form.body }}
+            </div>
+        </div>
+        <div class="control"><input type="submit" value="Submit" class="button"></div>
+    </form>
+</div>
+{% endblock %}

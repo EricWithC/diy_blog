@@ -1,7 +1,11 @@
 from django.shortcuts import render ,get_object_or_404
-from django.views import generic
+from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-from blog.models import Post, Blogger
+from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from blog.models import Post, Blogger, Comment
 
 def index(request):
     """View function for home page of website"""
@@ -38,4 +42,26 @@ class BloggerDetailView(generic.ListView):
         context = super(BloggerDetailView, self).get_context_data(**kwargs)
         context['blogger'] = get_object_or_404(Blogger, pk = self.kwargs['pk'])
         return context
+
+class CommentCreate(LoginRequiredMixin, CreateView):
+    model = Comment
+    fields = ['body']
+
+    def get_context_data(self, **kwargs):
+        context = super(CommentCreate, self).get_context_data(**kwargs)
+        context['post'] = get_object_or_404(Post, pk = self.kwargs['pk'])
+        return context
+
+    def form_valid(self, form):
+        """
+        Add author and associated blog to form data before setting it as valid (so it is saved to model)
+        """
+        #Add logged-in user as author of comment
+        form.instance.author = self.request.user
+        #Associate comment with blog based on passed id
+        form.instance.post=get_object_or_404(Post, pk = self.kwargs['pk'])
+        # Call super-class form validation behavior
+        return super(CommentCreate, self).form_valid(form)
     
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'pk': self.kwargs['pk']})

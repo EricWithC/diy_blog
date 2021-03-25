@@ -17,14 +17,104 @@
                     General
                 </p>
                 <ul class="menu-list">
-                    <li><a href="{% url 'index' %}">Home</a></li>
-                    <li><a href="{% url 'all-posts' %}">All Posts</a></li>
-                    <li><a href="{% url 'all-bloggers' %}">All Bloggers</a></li>
+                    <li><a href="{% url 'index' %}" {% if request.path_info ==  '/blog/' %}class="is-active"{% endif %}>Home</a></li>
+                    <li><a href="{% url 'all-posts' %}" {% if request.path_info ==  '/blog/posts/' %}class="is-active"{% endif %}>All Posts</a></li>
+                    <li><a href="{% url 'all-bloggers' %}" {% if request.path_info ==  '/blog/bloggers/' %}class="is-active"{% endif %}>All Bloggers</a></li>
                 </ul>
+                <p class="menu-label">
+                    User
+                </p>
+                <ul class="menu-list">
+                {% if user.is_authenticated %}
+                    <li>User: {{ user.username }}</li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+                </ul>
+                
             {% endblock %}
         </nav>
         <div class="column is-10">
             {% block content %}This is not the content you're looking for.{% endblock  %}
+            {% block pagination %}
+                {% if is_paginated %}
+                    <div class="pagination">
+                        {% if page_obj.has_previous %}
+                            <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="pagination-previous">Previous</a>
+                        {% endif %}
+                        {% if page_obj.has_next %}
+                            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" class="pagination-next">Next</a>
+                        {% endif %}
+                        <ul class="pagination-list">
+                            {% if page_obj.number == 1 %}
+                                <li>
+                                    <a href="{{ request.path }}?page={{ page_obj.number }}" class="pagination-link is-current">{{ page_obj.number }}</a>
+                                </li>
+                                <li>
+                                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" class="pagination-link">{{ page_obj.next_page_number }}</a>
+                                </li>
+                                {% if page_obj.paginator.num_pages > 3 %}
+                                    <li>
+                                        <span class="pagination-ellipsis">&hellip;</span>
+                                    </li>
+                                {% endif %}
+                                {% if page_obj.paginator.num_pages > 2 %}
+                                    <li>
+                                        <a href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}" class="pagination-link">{{ page_obj.paginator.num_pages }}</a>
+                                    </li>
+                                {% endif %}
+                            {% elif page_obj.number == page_obj.paginator.num_pages %}
+                                <li>
+                                    <a href="{{ request.path }}?page=1" class="pagination-link">1</a>
+                                </li>
+                                {% if page_obj.paginator.num_pages > 3 %}
+                                    <li>
+                                        <span class="pagination-ellipsis">&hellip;</span>
+                                    </li>
+                                    <li>
+                                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="pagination-link">{{ page_obj.previous_page_number }}</a>
+                                    </li>
+                                {% endif %}
+                                {% if page_obj.paginator.num_pages > 2 %}
+                                    <li>
+                                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="pagination-link">{{ page_obj.previous_page_number }}</a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="{{ request.path }}?page={{ page_obj.number }}" class="pagination-link is-current">{{ page_obj.number }}</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{{ request.path }}?page=1" class="pagination-link">1</a>
+                                </li>
+                                {% if page_obj.pagination.num_pages > 3 %}
+                                    <li>
+                                        <span class="pagination-ellipsis">&hellip;</span>
+                                    </li>
+                                    <li>
+                                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="pagination-link">{{ page_obj.previous_page_number }}</a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="{{ request.path }}?page={{ page_obj.number }}" class="pagination-link is-current">{{ page_obj.number }}</a>
+                                </li>
+                                {% if page_obj.pagination.num_pages > 3 %}
+                                    <li>
+                                        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" class="pagination-link">{{ page_obj.next_page_number }}</a>
+                                    </li>
+                                    <li>
+                                        <span class="pagination-ellipsis">&hellip;</span>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}" class="pagination-link">{{ page_obj.paginator.num_pages }}</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endblock %}
         </div>
     </div>
 </body>

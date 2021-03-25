@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %} | {{ blogger.username }}{% endblock %}
+{% block title %} | {{ blogger }}{% endblock %}
 
 {% block content %}
     <div class="section">
-        <h2 class="title is-2">Blogger: {{ blogger.username }}</h2>
+        <h2 class="title is-2">Blogger: {{ blogger }}</h2>
         <h3 class="title is-3">Bio:</h3>
         <p>{{ blogger.bio }}</p>
     </div>
