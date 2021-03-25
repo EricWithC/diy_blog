@@ -1,2 +1,2 @@
 # diy_blog
-Ultimate django skills tes
+Ultimate django skills test
