@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %} | Create a new post{% endblock %}
+
+{% block content %}
+<div class="section">
+    <h3 class="title is-3">Create a new post</h3>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="field">
+            <label for="{{ form.title.id_for_label }}" class="label">{{ form.title.label }}</label>
+            <div class="control">
+                {{ form.title }}
+            </div>
+        </div>
+        <div class="field">
+            <label for="{{ form.body.id_for_label }}" class="label">{{ form.body.label }}</label>
+            <div class="control">
+                {{ form.body }}
+            </div>
+        </div>
+        <div class="control"><input type="submit" value="Submit" class="button"></div>
+    </form>
+</div>
+{% endblock %}
