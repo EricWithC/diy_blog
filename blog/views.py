@@ -43,6 +43,15 @@ class BloggerDetailView(generic.ListView):
         context['blogger'] = get_object_or_404(Blogger, pk = self.kwargs['pk'])
         return context
 
+class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Post
+    permission_required = 'blog.can_edit_posts'
+    fields = ['title', 'body']
+
+    def form_valid(self, form):
+        form.instance.blogger = self.request.user.blogger
+        return super(PostCreate, self).form_valid(form)
+
 class CommentCreate(LoginRequiredMixin, CreateView):
     model = Comment
     fields = ['body']
