@@ -1,8 +1,7 @@
 from django.contrib import admin
-from blog.models import Post, Blogger, Comment
+from blog.models import Post, Comment
 
 admin.site.register(Comment)
-admin.site.register(Blogger)
 
 class PostCommentInline(admin.TabularInline):
     model = Comment
@@ -10,5 +9,5 @@ class PostCommentInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'blogger', 'post_date')
+    list_display = ('title', 'post_date')
     inlines = [PostCommentInline]

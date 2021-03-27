@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from blog.models import Post, Blogger, Comment
+from blog.models import Post, Comment
 
 def index(request):
     """View function for home page of website"""
@@ -23,34 +23,6 @@ class PostListView(generic.ListView):
 
 class PostDetailView(generic.DetailView):
     model = Post
-
-class BloggerListView(generic.ListView):
-    model = Blogger
-    paginate_by = 5
-
-class BloggerDetailView(generic.ListView):
-    model = Post
-    template_name = 'blog/blogger_detail.html'
-    paginate_by = 5
-    
-    def get_queryset(self):
-        id = self.kwargs['pk']
-        target_blogger = get_object_or_404(Blogger, pk = id)
-        return Post.objects.filter(blogger=target_blogger)
-
-    def get_context_data(self, **kwargs):
-        context = super(BloggerDetailView, self).get_context_data(**kwargs)
-        context['blogger'] = get_object_or_404(Blogger, pk = self.kwargs['pk'])
-        return context
-
-class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-    model = Post
-    permission_required = 'blog.can_edit_posts'
-    fields = ['title', 'body']
-
-    def form_valid(self, form):
-        form.instance.blogger = self.request.user.blogger
-        return super(PostCreate, self).form_valid(form)
 
 class CommentCreate(LoginRequiredMixin, CreateView):
     model = Comment

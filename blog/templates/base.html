@@ -19,7 +19,6 @@
                 <ul class="menu-list">
                     <li><a href="{% url 'index' %}" {% if request.path_info ==  '/blog/' %}class="is-active"{% endif %}>Home</a></li>
                     <li><a href="{% url 'all-posts' %}" {% if request.path_info ==  '/blog/posts/' %}class="is-active"{% endif %}>All Posts</a></li>
-                    <li><a href="{% url 'all-bloggers' %}" {% if request.path_info ==  '/blog/bloggers/' %}class="is-active"{% endif %}>All Bloggers</a></li>
                 </ul>
                 <p class="menu-label">
                     User
@@ -28,7 +27,6 @@
                 {% if user.is_authenticated %}
                     <li>User: {{ user.username }}</li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
-                    <li><a href="{% url 'post-create' %}">Make a post</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}

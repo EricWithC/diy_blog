@@ -14,8 +14,7 @@ class IndexViewTest(TestCase):
         for post_num in range(number_of_posts):
             Post.objects.create(
                 title=f'test title number {post_num}', 
-                body=f'Just a test number {post_num}', 
-                blogger=test_blogger
+                body=f'Just a test number {post_num}'
                 )
 
     def test_view_url_exists_at_desired_location(self):

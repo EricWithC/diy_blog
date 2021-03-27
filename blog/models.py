@@ -2,24 +2,11 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-class Blogger(models.Model):
-    """Model representing an blogger"""
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
-    bio = models.TextField(max_length=500)
-
-    def __str__(self):
-        """String for representing the Model object"""
-        return self.user.username
-    
-    def get_absolute_url(self):
-        """Return url to acces detail view of this post"""
-        return reverse("blogger-detail", args=[str(self.id)])
-
 class Post(models.Model):
     """Model representing a blog post"""
     title = models.CharField(max_length=200)
     post_date = models.DateField(auto_now_add=True)
-    blogger = models.ForeignKey(Blogger, on_delete=models.CASCADE)
+    blogger = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()
 
     class Meta:
